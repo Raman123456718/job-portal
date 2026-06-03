@@ -1,3 +1,4 @@
+
 import { Application } from "../models/application.model.js";
 import { Job } from "../models/job.model.js";
 
@@ -50,11 +51,11 @@ export const getAppliedJobs = async (req,res) => {
         const userId = req.id;
         const application = await Application.find({applicant:userId}).sort({createdAt:-1}).populate({
             path:'job',
-            // options:{sort:{createdAt:-1}},
-            populate:[
-               { path:'company'},
-               { path:'applications'}          //////////////
-            ]
+            options:{sort:{createdAt:-1}},
+            populate:{
+                path:'company',
+                options:{sort:{createdAt:-1}},
+            }
         });
         if(!application){
             return res.status(404).json({
@@ -89,7 +90,7 @@ export const getApplicants = async (req,res) => {
         };
         return res.status(200).json({
             job, 
-            success:true
+            succees:true
         });
     } catch (error) {
         console.log(error);
@@ -115,7 +116,7 @@ export const updateStatus = async (req,res) => {
             })
         };
 
-        // update the status 
+        // update the status
         application.status = status.toLowerCase();
         await application.save();
 
