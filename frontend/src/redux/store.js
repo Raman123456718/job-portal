@@ -15,12 +15,7 @@ import {
   REGISTER,
 } from "redux-persist";
 
-// ✅ custom storage (fixes getItem/setItem error)
-const storage = {
-  getItem: (key) => Promise.resolve(localStorage.getItem(key)),
-  setItem: (key, value) => Promise.resolve(localStorage.setItem(key, value)),
-  removeItem: (key) => Promise.resolve(localStorage.removeItem(key)),
-};
+import storage from "redux-persist/lib/storage";
 
 const persistConfig = {
   key: "root",
@@ -35,17 +30,28 @@ const rootReducer = combineReducers({
   application: applicationSlice,
 });
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+const persistedReducer = persistReducer(
+  persistConfig,
+  rootReducer
+);
 
 const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+        ignoredActions: [
+          FLUSH,
+          REHYDRATE,
+          PAUSE,
+          PERSIST,
+          PURGE,
+          REGISTER,
+        ],
       },
     }),
 });
 
-export default store;
 export const persistor = persistStore(store);
+
+export default store;
