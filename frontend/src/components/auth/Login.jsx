@@ -33,7 +33,6 @@ const changeEventHandler = (e) => {
 const submitHandler = async (e) => {
     e.preventDefault();
 
-    // Validation
     if (!input.email || !input.password || !input.role) {
         return toast.error("Please fill all fields");
     }
@@ -54,18 +53,68 @@ const submitHandler = async (e) => {
 
         if (res.data.success) {
             dispatch(setUser(res.data.user));
-            toast.success(res.data.message || "Login Successful");
+            toast.success(res.data.message);
             navigate("/");
         }
+
     } catch (error) {
         console.error("Login Error:", error);
 
-        const message =
-            error?.response?.data?.message ||
-            error?.message ||
-            "Unable to login. Please try again.";
+        if (!navigator.onLine) {
+            toast.error("No internet connection. Please check your network.");
+        }
+        else if (error.response) {
+            switch (error.response.status) {
+                case 400:
+                    toast.error(
+                        error.response.data.message ||
+                        "Please fill all required fields."
+                    );
+                    break;
 
-        toast.error(message);
+                case 401:
+                    toast.error(
+                        error.response.data.message ||
+                        "Invalid email or password."
+                    );
+                    break;
+
+                case 403:
+                    toast.error("Access denied.");
+                    break;
+
+                case 404:
+                    toast.error("User not found.");
+                    break;
+
+                case 500:
+                    toast.error("Server error. Please try again later.");
+                    break;
+
+                case 502:
+                    toast.error(
+                        "Server is waking up. Please wait a few seconds and try again."
+                    );
+                    break;
+
+                default:
+                    toast.error(
+                        error.response.data.message ||
+                        "Something went wrong."
+                    );
+            }
+        }
+        else if (error.request) {
+            toast.error(
+                "Unable to connect to server. Please try again later."
+            );
+        }
+        else {
+            toast.error(
+                error.message ||
+                "An unexpected error occurred."
+            );
+        }
     } finally {
         dispatch(setLoading(false));
     }
@@ -117,7 +166,7 @@ return (
                                 type="radio"
                                 name="role"
                                 value="student"
-                                checked={input.role === "student"}
+                                checked={input.role === 'student'}
                                 onChange={changeEventHandler}
                                 className="cursor-pointer"
                             />
@@ -129,7 +178,7 @@ return (
                                 type="radio"
                                 name="role"
                                 value="recruiter"
-                                checked={input.role === "recruiter"}
+                                checked={input.role === 'recruiter'}
                                 onChange={changeEventHandler}
                                 className="cursor-pointer"
                             />
@@ -138,16 +187,18 @@ return (
                     </RadioGroup>
                 </div>
 
-                {loading ? (
-                    <Button className="w-full my-4" disabled>
-                        <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-                        Please wait
-                    </Button>
-                ) : (
-                    <Button type="submit" className="w-full my-4">
-                        Login
-                    </Button>
-                )}
+                {
+                    loading ? (
+                        <Button className="w-full my-4" disabled>
+                            <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                            Please wait
+                        </Button>
+                    ) : (
+                        <Button type="submit" className="w-full my-4">
+                            Login
+                        </Button>
+                    )
+                }
 
                 <span className='text-sm'>
                     Don't have an account?{" "}
@@ -158,8 +209,8 @@ return (
             </form>
         </div>
     </div>
-);
+)
 
-};
+}
 
 export default Login;
