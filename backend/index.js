@@ -20,9 +20,7 @@ app.use(cookieParser());
 // CORS Configuration
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173"
-    ],
+    origin: "https://job-portal-two-dun.vercel.app",
     credentials: true,
   })
 );
