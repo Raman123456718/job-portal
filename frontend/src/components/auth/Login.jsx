@@ -13,203 +13,237 @@ import { setLoading, setUser } from '@/redux/authSlice'
 import { Loader2 } from 'lucide-react'
 
 const Login = () => {
-const [input, setInput] = useState({
-email: "",
-password: "",
-role: "",
-});
-
-const { loading, user } = useSelector(store => store.auth);
-const navigate = useNavigate();
-const dispatch = useDispatch();
-
-const changeEventHandler = (e) => {
-    setInput({
-        ...input,
-        [e.target.name]: e.target.value
+    const [input, setInput] = useState({
+        email: "",
+        password: "",
+        role: "",
     });
-};
 
-const submitHandler = async (e) => {
-    e.preventDefault();
+    const { loading, user } = useSelector(store => store.auth);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-    if (!input.email || !input.password || !input.role) {
-        return toast.error("Please fill all fields");
-    }
+    const changeEventHandler = (e) => {
+        setInput({
+            ...input,
+            [e.target.name]: e.target.value
+        });
+    };
 
-    try {
-        dispatch(setLoading(true));
+    const submitHandler = async (e) => {
+        e.preventDefault();
 
-        const res = await axios.post(
-            `${USER_API_END_POINT}/login`,
-            input,
-            {
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                withCredentials: true,
+        if (!input.email || !input.password || !input.role) {
+            return toast.error("Please fill all fields");
+        }
+
+        try {
+            dispatch(setLoading(true));
+
+            const res = await axios.post(
+                `${USER_API_END_POINT}/login`,
+                input,
+                {
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    withCredentials: true,
+                }
+            );
+
+            if (res.data.success) {
+                dispatch(setUser(res.data.user));
+                toast.success(res.data.message);
+                navigate("/");
             }
-        );
 
-        if (res.data.success) {
-            dispatch(setUser(res.data.user));
-            toast.success(res.data.message);
+        } catch (error) {
+            console.error("Login Error:", error);
+
+            if (!navigator.onLine) {
+                toast.error("No internet connection. Please check your network.");
+            }
+            else if (error.response) {
+                switch (error.response.status) {
+                    case 400:
+                        toast.error(
+                            error.response.data.message ||
+                            "Please fill all required fields."
+                        );
+                        break;
+
+                    case 401:
+                        toast.error(
+                            error.response.data.message ||
+                            "Invalid email or password."
+                        );
+                        break;
+
+                    case 403:
+                        toast.error("Access denied.");
+                        break;
+
+                    case 404:
+                        toast.error("User not found.");
+                        break;
+
+                    case 500:
+                        toast.error("Server error. Please try again later.");
+                        break;
+
+                    case 502:
+                        toast.error(
+                            "Server is waking up. Please wait a few seconds and try again."
+                        );
+                        break;
+
+                    default:
+                        toast.error(
+                            error.response.data.message ||
+                            "Something went wrong."
+                        );
+                }
+            }
+            else if (error.request) {
+                toast.error(
+                    "Unable to connect to server. Please try again later."
+                );
+            }
+            else {
+                toast.error(
+                    error.message ||
+                    "An unexpected error occurred."
+                );
+            }
+        } finally {
+            dispatch(setLoading(false));
+        }
+    };
+
+    useEffect(() => {
+        if (user) {
             navigate("/");
         }
+    }, [user, navigate]);
 
-    } catch (error) {
-        console.error("Login Error:", error);
+   return (
+  <div className="min-h-screen bg-gradient-to-r from-violet-100 via-white to-orange-100 flex items-center justify-center px-4">
+    <div className="flex w-full max-w-6xl items-center justify-between gap-10">
 
-        if (!navigator.onLine) {
-            toast.error("No internet connection. Please check your network.");
-        }
-        else if (error.response) {
-            switch (error.response.status) {
-                case 400:
-                    toast.error(
-                        error.response.data.message ||
-                        "Please fill all required fields."
-                    );
-                    break;
+      {/* Left Section */}
+      <div className="hidden lg:block flex-1">
+        <h1 className="text-6xl font-bold text-[#6A38C2] leading-tight">
+          Welcome <br /> Back
+        </h1>
 
-                case 401:
-                    toast.error(
-                        error.response.data.message ||
-                        "Invalid email or password."
-                    );
-                    break;
+        <p className="mt-6 text-lg text-gray-600 max-w-md">
+          Log in to access your profile, applications, and discover new career opportunities.
+        </p>
 
-                case 403:
-                    toast.error("Access denied.");
-                    break;
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/921/921347.png"
+          alt="login"
+          className="w-80 mt-8"
+        />
+      </div>
 
-                case 404:
-                    toast.error("User not found.");
-                    break;
+      {/* Login Form */}
+      <div className="flex-1 flex justify-center">
+        <form
+          onSubmit={submitHandler}
+          className="w-full max-w-lg bg-white shadow-2xl rounded-3xl p-8"
+        >
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-bold text-[#6A38C2]">
+              Login
+            </h1>
+            <p className="text-gray-500 mt-2">
+              Welcome back to JobPortal
+            </p>
+          </div>
 
-                case 500:
-                    toast.error("Server error. Please try again later.");
-                    break;
+          <div className="space-y-4">
+            <div>
+              <Label>Email</Label>
+              <Input
+                type="email"
+                value={input.email}
+                name="email"
+                onChange={changeEventHandler}
+                placeholder="Enter your email"
+                className="mt-1"
+              />
+            </div>
 
-                case 502:
-                    toast.error(
-                        "Server is waking up. Please wait a few seconds and try again."
-                    );
-                    break;
+            <div>
+              <Label>Password</Label>
+              <Input
+                type="password"
+                value={input.password}
+                name="password"
+                onChange={changeEventHandler}
+                placeholder="Enter your password"
+                className="mt-1"
+              />
+            </div>
 
-                default:
-                    toast.error(
-                        error.response.data.message ||
-                        "Something went wrong."
-                    );
-            }
-        }
-        else if (error.request) {
-            toast.error(
-                "Unable to connect to server. Please try again later."
-            );
-        }
-        else {
-            toast.error(
-                error.message ||
-                "An unexpected error occurred."
-            );
-        }
-    } finally {
-        dispatch(setLoading(false));
-    }
-};
+            <div>
+              <Label className="font-medium">Role</Label>
 
-useEffect(() => {
-    if (user) {
-        navigate("/");
-    }
-}, [user, navigate]);
+              <div className="flex gap-6 mt-3">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="role"
+                    value="student"
+                    checked={input.role === "student"}
+                    onChange={changeEventHandler}
+                  />
+                  Student
+                </label>
 
-return (
-    <div>
-        
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="role"
+                    value="recruiter"
+                    checked={input.role === "recruiter"}
+                    onChange={changeEventHandler}
+                  />
+                  Recruiter
+                </label>
+              </div>
+            </div>
+          </div>
 
-        <div className='flex items-center justify-center max-w-7xl mx-auto'>
-            <form
-                onSubmit={submitHandler}
-                className='w-1/2 border border-gray-200 rounded-md p-4 my-10'
+          {loading ? (
+            <Button className="w-full mt-6" disabled>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Please wait
+            </Button>
+          ) : (
+            <Button
+              type="submit"
+              className="w-full mt-6 bg-[#6A38C2] hover:bg-[#5a2db0]"
             >
-                <h1 className='font-bold text-xl mb-5'>Login</h1>
+              Login
+            </Button>
+          )}
 
-                <div className='my-2'>
-                    <Label>Email</Label>
-                    <Input
-                        type="email"
-                        value={input.email}
-                        name="email"
-                        onChange={changeEventHandler}
-                        placeholder="patel@gmail.com"
-                    />
-                </div>
-
-                <div className='my-2'>
-                    <Label>Password</Label>
-                    <Input
-                        type="password"
-                        value={input.password}
-                        name="password"
-                        onChange={changeEventHandler}
-                        placeholder="Enter Password"
-                    />
-                </div>
-
-                <div className='flex items-center justify-between'>
-                    <RadioGroup className="flex items-center gap-4 my-5">
-                        <div className="flex items-center space-x-2">
-                            <Input
-                                type="radio"
-                                name="role"
-                                value="student"
-                                checked={input.role === 'student'}
-                                onChange={changeEventHandler}
-                                className="cursor-pointer"
-                            />
-                            <Label>Student</Label>
-                        </div>
-
-                        <div className="flex items-center space-x-2">
-                            <Input
-                                type="radio"
-                                name="role"
-                                value="recruiter"
-                                checked={input.role === 'recruiter'}
-                                onChange={changeEventHandler}
-                                className="cursor-pointer"
-                            />
-                            <Label>Recruiter</Label>
-                        </div>
-                    </RadioGroup>
-                </div>
-
-                {
-                    loading ? (
-                        <Button className="w-full my-4" disabled>
-                            <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-                            Please wait
-                        </Button>
-                    ) : (
-                        <Button type="submit" className="w-full my-4">
-                            Login
-                        </Button>
-                    )
-                }
-
-                <span className='text-sm'>
-                    Don't have an account?{" "}
-                    <Link to="/signup" className='text-blue-600'>
-                        Signup
-                    </Link>
-                </span>
-            </form>
-        </div>
+          <p className="text-center mt-5 text-sm text-gray-600">
+            Don't have an account?{" "}
+            <Link
+              to="/signup"
+              className="text-[#6A38C2] font-semibold hover:underline"
+            >
+              Sign Up
+            </Link>
+          </p>
+        </form>
+      </div>
     </div>
-)
+  </div>
+);
 
 }
 
