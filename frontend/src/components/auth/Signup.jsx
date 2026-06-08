@@ -95,7 +95,7 @@ const Signup = () => {
                     case 400:
                         toast.error(
                             error.response.data.message ||
-                                "Invalid input data."
+                            "Invalid input data."
                         );
                         break;
 
@@ -114,7 +114,7 @@ const Signup = () => {
                     case 409:
                         toast.error(
                             error.response.data.message ||
-                                "User already exists."
+                            "User already exists."
                         );
                         break;
 
@@ -133,7 +133,7 @@ const Signup = () => {
                     default:
                         toast.error(
                             error.response.data.message ||
-                                "Something went wrong."
+                            "Something went wrong."
                         );
                 }
             } else if (error.request) {
@@ -157,119 +157,154 @@ const Signup = () => {
     }, [user, navigate]);
 
     return (
-        <div>
-           
+        <div className="min-h-screen bg-gradient-to-r from-violet-100 via-white to-orange-100 flex items-center justify-center px-4">
+            <div className="flex w-full max-w-6xl items-center justify-between gap-10">
 
-            <div className="flex items-center justify-center max-w-7xl mx-auto">
-                <form
-                    onSubmit={submitHandler}
-                    className="w-1/2 border border-gray-200 rounded-md p-4 my-10"
-                >
-                    <h1 className="font-bold text-xl mb-5">Sign Up</h1>
+                {/* Left Section */}
+                <div className="hidden lg:block flex-1">
+                    <h1 className="text-6xl font-bold text-[#6A38C2] leading-tight">
+                        Find Your <br /> Dream Job
+                    </h1>
+                    <p className="mt-6 text-lg text-gray-600 max-w-md">
+                        Join thousands of candidates and recruiters on JobPortal.
+                        Create your account and start your career journey today.
+                    </p>
 
-                    <div className="my-2">
-                        <Label>Full Name</Label>
-                        <Input
-                            type="text"
-                            value={input.fullname}
-                            name="fullname"
-                            onChange={changeEventHandler}
-                            placeholder="John Doe"
-                        />
-                    </div>
+                    <img
+                        src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+                        alt="job portal"
+                        className="w-80 mt-8"
+                    />
+                </div>
 
-                    <div className="my-2">
-                        <Label>Email</Label>
-                        <Input
-                            type="email"
-                            value={input.email}
-                            name="email"
-                            onChange={changeEventHandler}
-                            placeholder="john@gmail.com"
-                        />
-                    </div>
-
-                    <div className="my-2">
-                        <Label>Phone Number</Label>
-                        <Input
-                            type="text"
-                            value={input.phoneNumber}
-                            name="phoneNumber"
-                            onChange={changeEventHandler}
-                            placeholder="9876543210"
-                        />
-                    </div>
-
-                    <div className="my-2">
-                        <Label>Password</Label>
-                        <Input
-                            type="password"
-                            value={input.password}
-                            name="password"
-                            onChange={changeEventHandler}
-                            placeholder="Enter password"
-                        />
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                        <RadioGroup className="flex items-center gap-4 my-5">
-                            <div className="flex items-center space-x-2">
-                                <Input
-                                    type="radio"
-                                    name="role"
-                                    value="student"
-                                    checked={input.role === "student"}
-                                    onChange={changeEventHandler}
-                                    className="cursor-pointer"
-                                />
-                                <Label>Student</Label>
-                            </div>
-
-                            <div className="flex items-center space-x-2">
-                                <Input
-                                    type="radio"
-                                    name="role"
-                                    value="recruiter"
-                                    checked={input.role === "recruiter"}
-                                    onChange={changeEventHandler}
-                                    className="cursor-pointer"
-                                />
-                                <Label>Recruiter</Label>
-                            </div>
-                        </RadioGroup>
-
-                        <div className="flex items-center gap-2">
-                            <Label>Profile</Label>
-                            <Input
-                                accept="image/*"
-                                type="file"
-                                onChange={changeFileHandler}
-                                className="cursor-pointer"
-                            />
+                {/* Signup Form */}
+                <div className="flex-1 flex justify-center">
+                    <form
+                        onSubmit={submitHandler}
+                        className="w-full max-w-lg bg-white shadow-2xl rounded-3xl p-8"
+                    >
+                        <div className="text-center mb-8">
+                            <h1 className="text-4xl font-bold text-[#6A38C2]">
+                                Create Account
+                            </h1>
+                            <p className="text-gray-500 mt-2">
+                                Join JobPortal today
+                            </p>
                         </div>
-                    </div>
 
-                    {loading ? (
-                        <Button className="w-full my-4" disabled>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            Please wait
-                        </Button>
-                    ) : (
-                        <Button type="submit" className="w-full my-4">
-                            Signup
-                        </Button>
-                    )}
+                        <div className="space-y-4">
+                            <div>
+                                <Label>Full Name</Label>
+                                <Input
+                                    type="text"
+                                    value={input.fullname}
+                                    name="fullname"
+                                    onChange={changeEventHandler}
+                                    placeholder="Enter your full name"
+                                    className="mt-1"
+                                />
+                            </div>
 
-                    <span className="text-sm">
-                        Already have an account?{" "}
-                        <Link
-                            to="/login"
-                            className="text-blue-600"
-                        >
-                            Login
-                        </Link>
-                    </span>
-                </form>
+                            <div>
+                                <Label>Email</Label>
+                                <Input
+                                    type="email"
+                                    value={input.email}
+                                    name="email"
+                                    onChange={changeEventHandler}
+                                    placeholder="Enter your email"
+                                    className="mt-1"
+                                />
+                            </div>
+
+                            <div>
+                                <Label>Phone Number</Label>
+                                <Input
+                                    type="text"
+                                    value={input.phoneNumber}
+                                    name="phoneNumber"
+                                    onChange={changeEventHandler}
+                                    placeholder="Enter your phone number"
+                                    className="mt-1"
+                                />
+                            </div>
+
+                            <div>
+                                <Label>Password</Label>
+                                <Input
+                                    type="password"
+                                    value={input.password}
+                                    name="password"
+                                    onChange={changeEventHandler}
+                                    placeholder="Enter password"
+                                    className="mt-1"
+                                />
+                            </div>
+
+                            <div>
+                                <Label className="font-medium">Role</Label>
+
+                                <div className="flex gap-6 mt-3">
+                                    <label className="flex items-center gap-2 cursor-pointer">
+                                        <input
+                                            type="radio"
+                                            name="role"
+                                            value="student"
+                                            checked={input.role === "student"}
+                                            onChange={changeEventHandler}
+                                        />
+                                        Student
+                                    </label>
+
+                                    <label className="flex items-center gap-2 cursor-pointer">
+                                        <input
+                                            type="radio"
+                                            name="role"
+                                            value="recruiter"
+                                            checked={input.role === "recruiter"}
+                                            onChange={changeEventHandler}
+                                        />
+                                        Recruiter
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div>
+                                <Label>Profile Photo</Label>
+                                <Input
+                                    accept="image/*"
+                                    type="file"
+                                    onChange={changeFileHandler}
+                                    className="mt-1 cursor-pointer"
+                                />
+                            </div>
+                        </div>
+
+                        {loading ? (
+                            <Button className="w-full mt-6" disabled>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Please wait
+                            </Button>
+                        ) : (
+                            <Button
+                                type="submit"
+                                className="w-full mt-6 bg-[#6A38C2] hover:bg-[#5a2db0]"
+                            >
+                                Create Account
+                            </Button>
+                        )}
+
+                        <p className="text-center mt-5 text-sm text-gray-600">
+                            Already have an account?{" "}
+                            <Link
+                                to="/login"
+                                className="text-[#6A38C2] font-semibold hover:underline"
+                            >
+                                Login
+                            </Link>
+                        </p>
+                    </form>
+                </div>
             </div>
         </div>
     );
