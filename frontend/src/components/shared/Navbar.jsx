@@ -62,25 +62,25 @@ const Navbar = () => {
                         ) : (
                             <Popover>
                                 <PopoverTrigger asChild>
-    <div className="flex flex-col items-center cursor-pointer">
-        <div className="w-11 h-11 rounded-full border border-gray-300 flex items-center justify-center bg-white shadow-sm overflow-hidden">
+                                    <div className="flex flex-col items-center cursor-pointer">
+                                        <div className="w-11 h-11 rounded-full border border-gray-300 flex items-center justify-center bg-white shadow-sm overflow-hidden">
 
-            {user?.profile?.profilePhoto ? (
-                <img
-                    src={user?.profile?.profilePhoto}
-                    alt="profile"
-                    className="w-full h-full object-cover"
-                />
-            ) : (
-                // Prototype icon when no profile photo
-                <User2 size={22} className="text-gray-500" />
-            )}
+                                            {user?.profile?.profilePhoto ? (
+                                                <img
+                                                    src={user?.profile?.profilePhoto}
+                                                    alt="profile"
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            ) : (
+                                                // Prototype icon when no profile photo
+                                                <User2 size={22} className="text-gray-500" />
+                                            )}
 
-        </div>
+                                        </div>
 
-        <span className="text-xs mt-1 text-gray-700">Profile</span>
-    </div>
-</PopoverTrigger>
+                                        <span className="text-xs mt-1 text-gray-700">Profile</span>
+                                    </div>
+                                </PopoverTrigger>
 
                                 <PopoverContent className="w-80">
                                     <div className=''>
