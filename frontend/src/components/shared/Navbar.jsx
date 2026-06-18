@@ -29,35 +29,45 @@ const Navbar = () => {
         }
     }
     return (
-        <div className='bg-white'>
-            <div className='flex items-center justify-between mx-auto max-w-7xl h-16'>
+        <div className='sticky top-0 z-50 backdrop-blur-md bg-white/75 border-b border-gray-100/50 shadow-sm transition-all duration-300'>
+            <div className='flex items-center justify-between mx-auto max-w-7xl h-16 px-4 md:px-8'>
                 <div>
-                    <h1 className='text-2xl font-bold'>Job<span className='text-[#F83002]'>Portal</span></h1>
+                    <Link to="/">
+                        <h1 className='text-2xl font-black font-display tracking-tight bg-gradient-to-r from-violet-600 via-indigo-600 to-indigo-500 bg-clip-text text-transparent cursor-pointer hover:opacity-90 transition-opacity'>
+                            Job<span className='text-rose-500 font-extrabold'>Portal</span>
+                        </h1>
+                    </Link>
                 </div>
-                <div className='flex items-center gap-12'>
-                    <ul className='flex font-medium items-center gap-5'>
+                <div className='flex items-center gap-8'>
+                    <ul className='flex font-semibold items-center gap-7 text-gray-600 text-sm'>
                         {
                             user && user.role === 'recruiter' ? (
                                 <>
-                                    <li><Link to="/admin/companies">Companies</Link></li>
-                                    <li><Link to="/admin/jobs">Jobs</Link></li>
+                                    <li><Link to="/admin/companies" className='hover:text-indigo-600 transition-colors py-2 relative after:content-[""] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-indigo-600 after:transition-all hover:after:w-full'>Companies</Link></li>
+                                    <li><Link to="/admin/jobs" className='hover:text-indigo-600 transition-colors py-2 relative after:content-[""] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-indigo-600 after:transition-all hover:after:w-full'>Jobs</Link></li>
                                 </>
                             ) : (
                                 <>
-                                    <li><Link to="/">Home</Link></li>
-                                    <li><Link to="/jobs">Jobs</Link></li>
-                                    <li><Link to="/browse">Browse</Link></li>
+                                    <li><Link to="/" className='hover:text-indigo-600 transition-colors py-2 relative after:content-[""] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-indigo-600 after:transition-all hover:after:w-full'>Home</Link></li>
+                                    <li><Link to="/jobs" className='hover:text-indigo-600 transition-colors py-2 relative after:content-[""] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-indigo-600 after:transition-all hover:after:w-full'>Jobs</Link></li>
+                                    <li><Link to="/browse" className='hover:text-indigo-600 transition-colors py-2 relative after:content-[""] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-indigo-600 after:transition-all hover:after:w-full'>Browse</Link></li>
                                 </>
                             )
                         }
-
-
                     </ul>
                     {
                         !user ? (
-                            <div className='flex items-center gap-2'>
-                                <Link to="/login"><Button variant="outline">Login</Button></Link>
-                                <Link to="/signup"><Button className="bg-[#6A38C2] hover:bg-[#5b30a6]">Signup</Button></Link>
+                            <div className='flex items-center gap-3'>
+                                <Link to="/login">
+                                    <Button variant="ghost" className="text-gray-600 hover:text-indigo-600 hover:bg-indigo-50/50 font-semibold transition-all duration-200">
+                                        Login
+                                    </Button>
+                                </Link>
+                                <Link to="/signup">
+                                    <Button className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow-md shadow-indigo-100 hover:shadow-lg hover:shadow-indigo-200 hover:-translate-y-0.5 transition-all duration-200 rounded-lg px-5">
+                                        Signup
+                                    </Button>
+                                </Link>
                             </div>
                         ) : (
                             <Popover>
