@@ -25,7 +25,7 @@ const filterData = [
 
 const FilterCard = () => {
     const dispatch = useDispatch();
-    const { filters } = useSelector(store => store.job);
+    const { filters = {} } = useSelector(store => store.job) || {};
 
     const handleFilterChange = (key, value) => {
         dispatch(setFilters({ [key]: value }));
@@ -35,7 +35,7 @@ const FilterCard = () => {
         dispatch(clearFilters());
     }
 
-    const hasActiveFilters = filters.location || filters.industry || filters.salary;
+    const hasActiveFilters = filters?.location || filters?.industry || filters?.salary;
 
     return (
         <div className='w-full bg-white p-5 rounded-lg border border-gray-100 shadow-sm'>
