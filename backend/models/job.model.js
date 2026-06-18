@@ -50,4 +50,10 @@ const jobSchema = new mongoose.Schema({
         }
     ]
 },{timestamps:true});
+
+// Add indexes for optimized search and filtering
+jobSchema.index({ title: 'text', description: 'text', requirements: 'text' });
+jobSchema.index({ location: 1 });
+jobSchema.index({ salary: 1 });
+
 export const Job = mongoose.model("Job", jobSchema);

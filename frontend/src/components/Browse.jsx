@@ -8,7 +8,7 @@ import useGetAllJobs from '@/hooks/useGetAllJobs';
 const Browse = () => {
     useGetAllJobs();
 
-    const { allJobs, searchedQuery } = useSelector((store) => store.job);
+    const { allJobs } = useSelector((store) => store.job);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -17,34 +17,22 @@ const Browse = () => {
         };
     }, [dispatch]);
 
-    // Filter jobs based on searchedQuery
-    const filteredJobs = allJobs.filter((job) => {
-        if (!searchedQuery) return true;
-
-        return (
-            job.title?.toLowerCase().includes(searchedQuery.toLowerCase()) ||
-            job.description?.toLowerCase().includes(searchedQuery.toLowerCase()) ||
-            job.location?.toLowerCase().includes(searchedQuery.toLowerCase()) ||
-            job.company?.name?.toLowerCase().includes(searchedQuery.toLowerCase())
-        );
-    });
-
     return (
         <div>
             <Navbar />
 
-            <div className="max-w-7xl mx-auto my-10">
+            <div className="max-w-7xl mx-auto my-10 px-4">
                 <h1 className="font-bold text-2xl my-8">
-                    Search Results ({filteredJobs.length})
+                    Search Results ({allJobs.length})
                 </h1>
 
-                {filteredJobs.length === 0 ? (
+                {allJobs.length === 0 ? (
                     <div className="text-center text-gray-500 text-lg mt-10">
-                        No jobs found.
+                        No jobs found matching your search.
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {filteredJobs.map((job) => (
+                        {allJobs.map((job) => (
                             <Job key={job._id} job={job} />
                         ))}
                     </div>

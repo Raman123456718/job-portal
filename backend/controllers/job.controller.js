@@ -36,28 +36,59 @@ export const postJob = async (req, res) => {
 // student k liye
 export const getAllJobs = async (req, res) => {
     try {
-        const keyword = req.query.keyword || "";
-        const query = {
-            $or: [
+        const { keyword, location, industry, minSalary, maxSalary } = req.query;
+        const query = {};
+
+        // 1. Text Search (Keyword matches title, description, or requirements)
+        if (keyword) {
+            query.$or = [
                 { title: { $regex: keyword, $options: "i" } },
                 { description: { $regex: keyword, $options: "i" } },
-            ]
-        };
+                { requirements: { $regex: keyword, $options: "i" } }
+            ];
+        }
+
+        // 2. Location filter
+        if (location) {
+            query.location = { $regex: location, $options: "i" };
+        }
+
+        // 3. Industry/Role filter
+        if (industry) {
+            query.title = { $regex: industry, $options: "i" };
+        }
+
+        // 4. Salary range filter (numeric query)
+        if (minSalary || maxSalary) {
+            query.salary = {};
+            if (minSalary) {
+                query.salary.$gte = Number(minSalary);
+            }
+            if (maxSalary) {
+                query.salary.$lte = Number(maxSalary);
+            }
+        }
+
         const jobs = await Job.find(query).populate({
             path: "company"
         }).sort({ createdAt: -1 });
+
         if (!jobs) {
             return res.status(404).json({
                 message: "Jobs not found.",
                 success: false
-            })
-        };
+            });
+        }
         return res.status(200).json({
             jobs,
             success: true
-        })
+        });
     } catch (error) {
         console.log(error);
+        return res.status(500).json({
+            message: "Internal server error.",
+            success: false
+        });
     }
 }
 // student
