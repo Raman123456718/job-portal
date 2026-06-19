@@ -68,7 +68,7 @@ const Profile = () => {
                                 <a
                                     target='_blank'
                                     rel="noreferrer"
-                                    href={user.profile.resume}
+                                    href={`https://docs.google.com/gview?url=${encodeURIComponent(user.profile.resume)}&embedded=true`}
                                     className='inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-800 hover:underline cursor-pointer text-sm font-medium'
                                 >
                                     <FileText size={16} />
