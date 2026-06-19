@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from './ui/dialog'
 import { Label } from './ui/label'
 import { Input } from './ui/input'
@@ -15,14 +15,28 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
     const { user } = useSelector(store => store.auth);
 
     const [input, setInput] = useState({
-        fullname: user?.fullname || "",
-        email: user?.email || "",
-        phoneNumber: user?.phoneNumber || "",
-        bio: user?.profile?.bio || "",
-        skills: user?.profile?.skills?.map(skill => skill) || "",
-        file: user?.profile?.resume || ""
+        fullname: "",
+        email: "",
+        phoneNumber: "",
+        bio: "",
+        skills: "",
+        file: null
     });
     const dispatch = useDispatch();
+
+    // ✅ Sync form fields with the latest user data every time the dialog is opened
+    useEffect(() => {
+        if (open && user) {
+            setInput({
+                fullname: user?.fullname || "",
+                email: user?.email || "",
+                phoneNumber: user?.phoneNumber || "",
+                bio: user?.profile?.bio || "",
+                skills: user?.profile?.skills?.join(", ") || "",
+                file: null
+            });
+        }
+    }, [open, user]);
 
     const changeEventHandler = (e) => {
         setInput({ ...input, [e.target.name]: e.target.value });
@@ -55,17 +69,15 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
             if (res.data.success) {
                 dispatch(setUser(res.data.user));
                 toast.success(res.data.message);
+                setOpen(false); // ✅ Only close on success
             }
         } catch (error) {
             console.log(error);
-            toast.error(error.response.data.message);
-        } finally{
+            toast.error(error?.response?.data?.message || "Something went wrong");
+        } finally {
             setLoading(false);
         }
-        setOpen(false);
-        console.log(input);
     }
-
 
 
     return (
@@ -81,7 +93,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                                 <Label htmlFor="name" className="text-right">Name</Label>
                                 <Input
                                     id="name"
-                                    name="name"
+                                    name="fullname"
                                     type="text"
                                     value={input.fullname}
                                     onChange={changeEventHandler}
@@ -103,7 +115,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                                 <Label htmlFor="number" className="text-right">Number</Label>
                                 <Input
                                     id="number"
-                                    name="number"
+                                    name="phoneNumber"
                                     value={input.phoneNumber}
                                     onChange={changeEventHandler}
                                     className="col-span-3"
