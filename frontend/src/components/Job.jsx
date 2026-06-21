@@ -54,7 +54,7 @@ const Job = ({job}) => {
                         {job?.jobType}
                     </Badge>
                     <Badge className='bg-violet-50 text-violet-700 font-bold border-none px-2.5 py-1 text-[11px] rounded-lg hover:bg-violet-100 transition-colors' variant="flat">
-                        {job?.salary} LPA
+                        ${job?.salary}
                     </Badge>
                 </div>
                 <div className='flex items-center gap-3 w-full'>

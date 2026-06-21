@@ -19,7 +19,7 @@ const filterData = [
     {
         filterType: "Salary Range",
         key: "salary",
-        array: ["0-6 LPA", "6-12 LPA", "12-25 LPA", "25+ LPA"]
+        array: ["$0-6", "$6-12", "$12-25", "$25+"]
     },
 ]
 

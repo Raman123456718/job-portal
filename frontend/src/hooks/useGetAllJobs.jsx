@@ -17,16 +17,16 @@ const useGetAllJobs = () => {
                 if (filters?.industry) params.append('industry', filters.industry);
 
                 if (filters?.salary) {
-                    if (filters.salary === '0-6 LPA') {
+                    if (filters.salary === '$0-6') {
                         params.append('minSalary', '0');
                         params.append('maxSalary', '6');
-                    } else if (filters.salary === '6-12 LPA') {
+                    } else if (filters.salary === '$6-12') {
                         params.append('minSalary', '6');
                         params.append('maxSalary', '12');
-                    } else if (filters.salary === '12-25 LPA') {
+                    } else if (filters.salary === '$12-25') {
                         params.append('minSalary', '12');
                         params.append('maxSalary', '25');
-                    } else if (filters.salary === '25+ LPA') {
+                    } else if (filters.salary === '$25+') {
                         params.append('minSalary', '25');
                     }
                 }
