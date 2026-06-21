@@ -141,17 +141,21 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                                     className="col-span-3"
                                 />
                             </div>
-                            <div className='grid grid-cols-4 items-center gap-4'>
-                                <Label htmlFor="file" className="text-right">Resume</Label>
-                                <Input
-                                    id="file"
-                                    name="file"
-                                    type="file"
-                                    accept="application/pdf"
-                                    onChange={fileChangeHandler}
-                                    className="col-span-3"
-                                />
-                            </div>
+                            {
+                                user?.role !== 'recruiter' && (
+                                    <div className='grid grid-cols-4 items-center gap-4'>
+                                        <Label htmlFor="file" className="text-right">Resume</Label>
+                                        <Input
+                                            id="file"
+                                            name="file"
+                                            type="file"
+                                            accept="application/pdf"
+                                            onChange={fileChangeHandler}
+                                            className="col-span-3"
+                                        />
+                                    </div>
+                                )
+                            }
                         </div>
                         <DialogFooter>
                             {

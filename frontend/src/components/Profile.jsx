@@ -60,30 +60,38 @@ const Profile = () => {
                         }
                     </div>
                 </div>
-                <div className='grid w-full max-w-sm items-center gap-1.5'>
-                    <Label className="text-md font-bold">Resume</Label>
-                    {
-                        user?.profile?.resume
-                            ? (
-                                <a
-                                    target='_blank'
-                                    rel="noreferrer"
-                                    href={`https://docs.google.com/gview?url=${encodeURIComponent(user.profile.resume)}&embedded=true`}
-                                    className='inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-800 hover:underline cursor-pointer text-sm font-medium'
-                                >
-                                    <FileText size={16} />
-                                    {user.profile.resumeOriginalName || "View Resume"}
-                                </a>
-                            )
-                            : <span className='text-gray-400 text-sm'>No resume uploaded</span>
-                    }
-                </div>
+                {
+                    user?.role !== 'recruiter' && (
+                        <div className='grid w-full max-w-sm items-center gap-1.5'>
+                            <Label className="text-md font-bold">Resume</Label>
+                            {
+                                user?.profile?.resume
+                                    ? (
+                                        <a
+                                            target='_blank'
+                                            rel="noreferrer"
+                                            href={`https://docs.google.com/gview?url=${encodeURIComponent(user.profile.resume)}&embedded=true`}
+                                            className='inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-800 hover:underline cursor-pointer text-sm font-medium'
+                                        >
+                                            <FileText size={16} />
+                                            {user.profile.resumeOriginalName || "View Resume"}
+                                        </a>
+                                    )
+                                    : <span className='text-gray-400 text-sm'>No resume uploaded</span>
+                            }
+                        </div>
+                    )
+                }
             </div>
-            <div className='max-w-4xl mx-auto bg-white rounded-2xl'>
-                <h1 className='font-bold text-lg my-5'>Applied Jobs</h1>
-                {/* Applied Job Table */}
-                <AppliedJobTable />
-            </div>
+            {
+                user?.role !== 'recruiter' && (
+                    <div className='max-w-4xl mx-auto bg-white rounded-2xl'>
+                        <h1 className='font-bold text-lg my-5'>Applied Jobs</h1>
+                        {/* Applied Job Table */}
+                        <AppliedJobTable />
+                    </div>
+                )
+            }
             <UpdateProfileDialog open={open} setOpen={setOpen} />
         </div>
     )
