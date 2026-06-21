@@ -8,17 +8,16 @@ import { APPLICATION_API_END_POINT, JOB_API_END_POINT } from '@/utils/constant';
 import { setSingleJob } from '@/redux/jobSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'sonner';
-import { setUser } from '@/redux/authSlice';
 
 const JobDescription = () => {
     const {singleJob} = useSelector(store => store.job);
     const {user} = useSelector(store=>store.auth);
+    const isIntiallyApplied = singleJob?.applications?.some(application => application.applicant === user?._id) || false;
+    const [isApplied, setIsApplied] = useState(isIntiallyApplied);
+
     const params = useParams();
     const jobId = params.id;
     const dispatch = useDispatch();
-    const isIntiallyApplied = singleJob?.applications?.some(application => application.applicant === user?._id) || false;
-    const [isApplied, setIsApplied] = useState(isIntiallyApplied);
-    const isSaved = user?.profile?.savedJobs?.includes(jobId) || false;
 
     const applyJobHandler = async () => {
         try {
@@ -32,34 +31,8 @@ const JobDescription = () => {
 
             }
         } catch (error) {
-        } catch (error) {
             console.log(error);
             toast.error(error.response.data.message);
-        }
-    }
-
-    const handleSaveJob = async () => {
-        if (!user) {
-            toast.error("You must be logged in to save jobs.");
-            return;
-        }
-        try {
-            const res = await axios.post(`${USER_API_END_POINT}/saved-jobs/${jobId}`, {}, {
-                withCredentials: true
-            });
-            if (res.data.success) {
-                toast.success(res.data.message);
-                dispatch(setUser({
-                    ...user,
-                    profile: {
-                        ...user.profile,
-                        savedJobs: res.data.savedJobs
-                    }
-                }));
-            }
-        } catch (error) {
-            console.log(error);
-            toast.error(error.response?.data?.message || "Failed to save job");
         }
     }
 
@@ -88,20 +61,13 @@ const JobDescription = () => {
                         <Badge className={'text-[#F83002] font-bold'} variant="ghost">{singleJob?.jobType}</Badge>
                         <Badge className={'text-[#7209b7] font-bold'} variant="ghost">{singleJob?.salary}LPA</Badge>
                     </div>
-                <div className='flex gap-4 items-center'>
-                    <Button
-                        onClick={handleSaveJob}
-                        variant="outline"
-                        className={`rounded-lg font-semibold shadow-sm transition-all duration-200 ${isSaved ? 'text-green-600 border-green-600 bg-green-50 hover:bg-green-100 hover:text-green-700' : 'text-indigo-600 border-indigo-600 bg-white hover:bg-indigo-50'}`}>
-                        {isSaved ? "Saved" : "Save Job"}
-                    </Button>
-                    <Button
-                        onClick={isApplied ? null : applyJobHandler}
-                        disabled={isApplied}
-                        className={`rounded-lg ${isApplied ? 'bg-gray-600 cursor-not-allowed' : 'bg-[#7209b7] hover:bg-[#5f32ad]'}`}>
-                        {isApplied ? 'Already Applied' : 'Apply Now'}
-                    </Button>
                 </div>
+                <Button
+                onClick={isApplied ? null : applyJobHandler}
+                    disabled={isApplied}
+                    className={`rounded-lg ${isApplied ? 'bg-gray-600 cursor-not-allowed' : 'bg-[#7209b7] hover:bg-[#5f32ad]'}`}>
+                    {isApplied ? 'Already Applied' : 'Apply Now'}
+                </Button>
             </div>
             <h1 className='border-b-2 border-b-gray-300 font-medium py-4'>Job Description</h1>
             <div className='my-4'>
