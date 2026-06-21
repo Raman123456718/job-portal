@@ -45,9 +45,10 @@ const useGetAllJobs = () => {
             }
         };
 
+        const delay = searchedQuery ? 300 : 0;
         const timer = setTimeout(() => {
             fetchAllJobs();
-        }, 300);
+        }, delay);
 
         return () => {
             clearTimeout(timer);
