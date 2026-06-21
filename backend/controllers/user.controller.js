@@ -1,4 +1,5 @@
 import { User } from "../models/user.model.js";
+import { Job } from "../models/job.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import getDataUri from "../utils/datauri.js";
@@ -213,6 +214,77 @@ export const updateProfile = async (req, res) => {
         return res.status(500).json({
             message: "Server Error",
             success: false,
+        });
+    }
+};
+
+// Toggle Save Job
+export const toggleSaveJob = async (req, res) => {
+    try {
+        const jobId = req.params.id;
+        const userId = req.id;
+
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found.",
+                success: false
+            });
+        }
+
+        const isSaved = user.profile.savedJobs.includes(jobId);
+        
+        if (isSaved) {
+            // Remove job
+            user.profile.savedJobs = user.profile.savedJobs.filter(id => id.toString() !== jobId);
+        } else {
+            // Add job
+            user.profile.savedJobs.push(jobId);
+        }
+
+        await user.save();
+
+        return res.status(200).json({
+            message: isSaved ? "Job removed from saved list." : "Job saved successfully.",
+            success: true,
+            savedJobs: user.profile.savedJobs
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message: "Server Error",
+            success: false
+        });
+    }
+};
+
+// Get Saved Jobs
+export const getSavedJobs = async (req, res) => {
+    try {
+        const userId = req.id;
+        const user = await User.findById(userId).populate({
+            path: 'profile.savedJobs',
+            populate: {
+                path: 'company'
+            }
+        });
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found.",
+                success: false
+            });
+        }
+
+        return res.status(200).json({
+            savedJobs: user.profile.savedJobs,
+            success: true
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message: "Server Error",
+            success: false
         });
     }
 };
