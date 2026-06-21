@@ -46,11 +46,7 @@ export const getAllJobs = async (req, res) => {
 
         // 1. Text Search (Keyword matches title, description, or requirements)
         if (keyword) {
-            query.$or = [
-                { title: { $regex: keyword, $options: "i" } },
-                { description: { $regex: keyword, $options: "i" } },
-                { requirements: { $regex: keyword, $options: "i" } }
-            ];
+            query.$text = { $search: keyword };
         }
 
         // 2. Location filter

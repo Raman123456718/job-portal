@@ -15,12 +15,7 @@ const filterData = [
         filterType: "Industry",
         key: "industry",
         array: ["Frontend", "Backend", "FullStack"]
-    },
-    {
-        filterType: "Salary Range",
-        key: "salary",
-        array: ["$0-6", "$6-12", "$12-25", "$25+"]
-    },
+    }
 ]
 
 const FilterCard = () => {
