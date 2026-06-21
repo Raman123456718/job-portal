@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button } from './ui/button'
-import { Bookmark, MapPin } from 'lucide-react'
+import { MapPin } from 'lucide-react'
 import { Badge } from './ui/badge'
 import { useNavigate } from 'react-router-dom'
 
@@ -21,9 +21,6 @@ const Job = ({job}) => {
                     <span className='text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full uppercase tracking-wide'>
                         {daysAgoFunction(job?.createdAt) === 0 ? "Today" : `${daysAgoFunction(job?.createdAt)} days ago`}
                     </span>
-                    <Button variant="ghost" className="text-gray-400 hover:text-rose-500 hover:bg-rose-50/50 border-none rounded-full h-8 w-8 p-0" size="icon">
-                        <Bookmark size={16} />
-                    </Button>
                 </div>
 
                 <div className='flex items-center gap-3.5 my-3'>
@@ -63,9 +60,6 @@ const Job = ({job}) => {
                 <div className='flex items-center gap-3 w-full'>
                     <Button onClick={()=> navigate(`/description/${job?._id}`)} variant="outline" className="border-gray-200 text-gray-600 hover:text-indigo-600 hover:border-indigo-100 hover:bg-indigo-50/20 font-semibold rounded-xl text-sm py-4 h-auto flex-1 transition-all duration-200 hover:-translate-y-0.5">
                         Details
-                    </Button>
-                    <Button className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow-md shadow-indigo-100 hover:shadow-lg hover:shadow-indigo-200 rounded-xl text-sm py-4 h-auto flex-1 transition-all duration-200 hover:-translate-y-0.5">
-                        Save Job
                     </Button>
                 </div>
             </div>
