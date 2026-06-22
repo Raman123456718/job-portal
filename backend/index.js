@@ -18,12 +18,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // CORS Configuration
-app.use(
-  cors({
-    origin: "https://job-portal-two-dun.vercel.app",
-    credentials: true,
-  })
-);
+app.use(cors({
+    origin: "https://job-portal-cse.vercel.app",
+    credentials: true
+}));
 
 const PORT = process.env.PORT || 3000;
 
