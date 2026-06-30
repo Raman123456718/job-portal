@@ -1,23 +1,46 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { lazy, Suspense } from 'react'
 
+// Helper to retry lazy load on chunk/module fetch failures (usually due to a new deployment)
+const lazyWithRetry = (componentImport) => {
+  return lazy(async () => {
+    try {
+      return await componentImport();
+    } catch (error) {
+      console.error("Failed to load chunk, retrying with page reload:", error);
+      
+      const lastReload = sessionStorage.getItem('chunk-last-reload');
+      const now = Date.now();
+      
+      // Only reload if we haven't reloaded in the last 10 seconds to prevent infinite reload loops
+      if (!lastReload || now - parseInt(lastReload, 10) > 10000) {
+        sessionStorage.setItem('chunk-last-reload', now.toString());
+        window.location.reload();
+        return new Promise(() => {}); // Keep in loading state until page reloads
+      }
+      
+      throw error;
+    }
+  });
+};
+
 // Eager load - needed as route wrapper
 import ProtectedRoute from './components/admin/ProtectedRoute'
 
-// Lazy load all page components
-const Home = lazy(() => import('./components/Home'))
-const Login = lazy(() => import('./components/auth/Login'))
-const Signup = lazy(() => import('./components/auth/Signup'))
-const Jobs = lazy(() => import('./components/Jobs'))
-const Browse = lazy(() => import('./components/Browse'))
-const Profile = lazy(() => import('./components/Profile'))
-const JobDescription = lazy(() => import('./components/JobDescription'))
-const Companies = lazy(() => import('./components/admin/Companies'))
-const CompanyCreate = lazy(() => import('./components/admin/CompanyCreate'))
-const CompanySetup = lazy(() => import('./components/admin/CompanySetup'))
-const AdminJobs = lazy(() => import('./components/admin/AdminJobs'))
-const PostJob = lazy(() => import('./components/admin/PostJob'))
-const Applicants = lazy(() => import('./components/admin/Applicants'))
+// Lazy load all page components with retry logic
+const Home = lazyWithRetry(() => import('./components/Home'))
+const Login = lazyWithRetry(() => import('./components/auth/Login'))
+const Signup = lazyWithRetry(() => import('./components/auth/Signup'))
+const Jobs = lazyWithRetry(() => import('./components/Jobs'))
+const Browse = lazyWithRetry(() => import('./components/Browse'))
+const Profile = lazyWithRetry(() => import('./components/Profile'))
+const JobDescription = lazyWithRetry(() => import('./components/JobDescription'))
+const Companies = lazyWithRetry(() => import('./components/admin/Companies'))
+const CompanyCreate = lazyWithRetry(() => import('./components/admin/CompanyCreate'))
+const CompanySetup = lazyWithRetry(() => import('./components/admin/CompanySetup'))
+const AdminJobs = lazyWithRetry(() => import('./components/admin/AdminJobs'))
+const PostJob = lazyWithRetry(() => import('./components/admin/PostJob'))
+const Applicants = lazyWithRetry(() => import('./components/admin/Applicants'))
 
 // Loading fallback
 const PageLoader = () => (

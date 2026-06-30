@@ -20,7 +20,8 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
         phoneNumber: "",
         bio: "",
         skills: "",
-        file: null
+        file: null,
+        profilePhoto: null
     });
     const dispatch = useDispatch();
 
@@ -33,7 +34,8 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                 phoneNumber: user?.phoneNumber || "",
                 bio: user?.profile?.bio || "",
                 skills: user?.profile?.skills?.join(", ") || "",
-                file: null
+                file: null,
+                profilePhoto: null
             });
         }
     }, [open, user]);
@@ -47,6 +49,11 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
         setInput({ ...input, file })
     }
 
+    const profilePhotoChangeHandler = (e) => {
+        const file = e.target.files?.[0];
+        setInput({ ...input, profilePhoto: file });
+    }
+
     const submitHandler = async (e) => {
         e.preventDefault();
         const formData = new FormData();
@@ -57,6 +64,9 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
         formData.append("skills", input.skills);
         if (input.file) {
             formData.append("file", input.file);
+        }
+        if (input.profilePhoto) {
+            formData.append("profilePhoto", input.profilePhoto);
         }
         try {
             setLoading(true);
@@ -138,6 +148,17 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                                     name="skills"
                                     value={input.skills}
                                     onChange={changeEventHandler}
+                                    className="col-span-3"
+                                />
+                            </div>
+                            <div className='grid grid-cols-4 items-center gap-4'>
+                                <Label htmlFor="profilePhoto" className="text-right">Profile Photo</Label>
+                                <Input
+                                    id="profilePhoto"
+                                    name="profilePhoto"
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={profilePhotoChangeHandler}
                                     className="col-span-3"
                                 />
                             </div>

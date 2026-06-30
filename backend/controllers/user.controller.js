@@ -182,14 +182,20 @@ export const updateProfile = async (req, res) => {
             user.profile.skills = skills.split(",");
         }
 
-        if (req.file) {
-            const fileUri = getDataUri(req.file);
-            const cloudResponse = await cloudinary.uploader.upload(fileUri.content, {
-                resource_type: "raw",
-            });
-
-            user.profile.resume = cloudResponse.secure_url;
-            user.profile.resumeOriginalName = req.file.originalname;
+        if (req.files) {
+            if (req.files.file && req.files.file[0]) {
+                const fileUri = getDataUri(req.files.file[0]);
+                const cloudResponse = await cloudinary.uploader.upload(fileUri.content, {
+                    resource_type: "raw",
+                });
+                user.profile.resume = cloudResponse.secure_url;
+                user.profile.resumeOriginalName = req.files.file[0].originalname;
+            }
+            if (req.files.profilePhoto && req.files.profilePhoto[0]) {
+                const fileUri = getDataUri(req.files.profilePhoto[0]);
+                const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+                user.profile.profilePhoto = cloudResponse.secure_url;
+            }
         }
 
         await user.save();
