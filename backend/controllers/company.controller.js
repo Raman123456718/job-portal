@@ -30,10 +30,6 @@ export const registerCompany = async (req, res) => {
         })
     } catch (error) {
         console.log(error);
-        return res.status(500).json({
-            message: "Internal server error during company registration.",
-            success: false
-        });
     }
 }
 export const getCompany = async (req, res) => {
@@ -52,10 +48,6 @@ export const getCompany = async (req, res) => {
         })
     } catch (error) {
         console.log(error);
-        return res.status(500).json({
-            message: "Internal server error while fetching companies.",
-            success: false
-        });
     }
 }
 // get company by id
@@ -75,10 +67,6 @@ export const getCompanyById = async (req, res) => {
         })
     } catch (error) {
         console.log(error);
-        return res.status(500).json({
-            message: "Internal server error while retrieving company details.",
-            success: false
-        });
     }
 }
 export const updateCompany = async (req, res) => {
@@ -108,9 +96,5 @@ export const updateCompany = async (req, res) => {
 
     } catch (error) {
         console.log(error);
-        return res.status(500).json({
-            message: "Internal server error during company update.",
-            success: false
-        });
     }
 }

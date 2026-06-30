@@ -111,13 +111,12 @@ export const login = async (req, res) => {
             profile: user.profile,
         };
 
-        const isProd = process.env.NODE_ENV === "production";
         return res
             .status(200)
             .cookie("token", token, {
                 httpOnly: true,
-                secure: isProd,
-                sameSite: isProd ? "None" : "Lax",
+                secure: true,
+                sameSite: "None",
                 maxAge: 24 * 60 * 60 * 1000,
             })
             .json({
@@ -137,13 +136,12 @@ export const login = async (req, res) => {
 // Logout
 export const logout = async (req, res) => {
     try {
-        const isProd = process.env.NODE_ENV === "production";
         return res
             .status(200)
             .cookie("token", "", {
                 httpOnly: true,
-                secure: isProd,
-                sameSite: isProd ? "None" : "Lax",
+                secure: true,
+                sameSite: "None",
                 expires: new Date(0),
             })
             .json({

@@ -25,10 +25,7 @@ const Navbar = () => {
             }
         } catch (error) {
             console.log(error);
-            const errorMsg = error.response?.data?.message || "Server offline. Cleared local session.";
-            toast.error(errorMsg);
-            dispatch(setUser(null));
-            navigate("/");
+            toast.error(error.response.data.message);
         }
     }
     return (

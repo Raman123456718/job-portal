@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const useGetAllJobs = () => {
     const dispatch = useDispatch();
-    const { allJobs = [], searchedQuery, filters = {} } = useSelector((store) => store.job) || {};
+    const { searchedQuery, filters = {} } = useSelector((store) => store.job) || {};
 
     // Serialize filters to a stable string to avoid infinite re-renders
     const filtersKey = useMemo(() => JSON.stringify(filters), [filters]);
@@ -17,18 +17,6 @@ const useGetAllJobs = () => {
         const fetchAllJobs = async () => {
             try {
                 const currentFilters = JSON.parse(filtersKey);
-                
-                // If we already have jobs loaded and there is no search query/filters, skip fetch
-                const hasExistingJobs = allJobs.length > 0;
-                const hasNoActiveSearchOrFilters = !searchedQuery && 
-                    !currentFilters?.location && 
-                    !currentFilters?.industry && 
-                    !currentFilters?.salary;
-                
-                if (hasExistingJobs && hasNoActiveSearchOrFilters) {
-                    return;
-                }
-
                 const params = new URLSearchParams();
                 if (searchedQuery) params.append('keyword', searchedQuery);
                 if (currentFilters?.location) params.append('location', currentFilters.location);

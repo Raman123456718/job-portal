@@ -2,13 +2,11 @@ import { setCompanies} from '@/redux/companySlice'
 import { COMPANY_API_END_POINT} from '@/utils/constant'
 import axios from 'axios'
 import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 const useGetAllCompanies = () => {
     const dispatch = useDispatch();
-    const { companies = [] } = useSelector(store => store.company) || {};
     useEffect(()=>{
-        if (companies.length > 0) return;
         const fetchCompanies = async () => {
             try {
                 const res = await axios.get(`${COMPANY_API_END_POINT}/get`,{withCredentials:true});
@@ -21,7 +19,7 @@ const useGetAllCompanies = () => {
             }
         }
         fetchCompanies();
-    },[dispatch, companies.length])
+    },[])
 }
 
 export default useGetAllCompanies

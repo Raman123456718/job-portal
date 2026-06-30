@@ -44,10 +44,6 @@ export const applyJob = async (req, res) => {
         })
     } catch (error) {
         console.log(error);
-        return res.status(500).json({
-            message: "Internal server error while applying for job.",
-            success: false
-        });
     }
 };
 export const getAppliedJobs = async (req,res) => {
@@ -73,10 +69,6 @@ export const getAppliedJobs = async (req,res) => {
         })
     } catch (error) {
         console.log(error);
-        return res.status(500).json({
-            message: "Internal server error while retrieving applied jobs.",
-            success: false
-        });
     }
 }
 // admin dekhega kitna user ne apply kiya hai
@@ -102,10 +94,6 @@ export const getApplicants = async (req,res) => {
         });
     } catch (error) {
         console.log(error);
-        return res.status(500).json({
-            message: "Internal server error while retrieving applicants.",
-            success: false
-        });
     }
 }
 export const updateStatus = async (req,res) => {
@@ -139,9 +127,5 @@ export const updateStatus = async (req,res) => {
 
     } catch (error) {
         console.log(error);
-        return res.status(500).json({
-            message: "Internal server error while updating application status.",
-            success: false
-        });
     }
 }
