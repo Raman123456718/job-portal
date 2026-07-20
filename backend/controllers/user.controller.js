@@ -4,6 +4,8 @@ import jwt from "jsonwebtoken";
 import getDataUri from "../utils/datauri.js";
 import cloudinary from "../utils/cloudinary.js";
 
+const isProduction = process.env.NODE_ENV === "production";
+
 // Register
 export const register = async (req, res) => {
     try {
@@ -115,8 +117,8 @@ export const login = async (req, res) => {
             .status(200)
             .cookie("token", token, {
                 httpOnly: true,
-                secure: true,
-                sameSite: "None",
+                secure: isProduction,
+                sameSite: isProduction ? "None" : "Lax",
                 maxAge: 24 * 60 * 60 * 1000,
             })
             .json({
@@ -140,8 +142,8 @@ export const logout = async (req, res) => {
             .status(200)
             .cookie("token", "", {
                 httpOnly: true,
-                secure: true,
-                sameSite: "None",
+                secure: isProduction,
+                sameSite: isProduction ? "None" : "Lax",
                 expires: new Date(0),
             })
             .json({
